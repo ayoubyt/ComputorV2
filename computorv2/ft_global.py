@@ -1,7 +1,15 @@
 from enum import Enum, auto
-from typing import Dict
+from .types import Function
+from . import ft_math
 
-vars = {}
+builtin_vars = {
+    "sqrt": Function(ft_math.ft_sqrt, "sqrt"),
+    "max": Function(ft_math.ft_max, "max"),
+    "min": Function(ft_math.ft_min, "min"),
+}
+
+user_vars = {
+}
 
 
 class EvalDir(Enum):
@@ -9,8 +17,11 @@ class EvalDir(Enum):
     an enum to hold avaluation execution direction of
     an operator
     """
+    # left to right
     LTOR = auto()
+    # right to left
     RTOL = auto()
+    # not an operator
     NONE = auto()
 
 
@@ -23,29 +34,33 @@ operators = {
         "precedence": -1,
         "eval_dir": EvalDir.NONE
     },
+    ",": {
+        "precedence": -1,
+        "eval_dir": EvalDir.NONE
+    },
     "^": {
         "precedence": 4,
-        "eval_dir": EvalDir.RTOL
+        "eval_dir": EvalDir.RTOL,
+        "func": lambda a, b: a ** b
     },
     "*": {
         "precedence": 3,
-        "eval_dir": EvalDir.LTOR
+        "eval_dir": EvalDir.LTOR,
+        "func": lambda a, b: a * b
     },
     "/": {
         "precedence": 3,
-        "eval_dir": EvalDir.LTOR
+        "eval_dir": EvalDir.LTOR,
+        "func": lambda a, b: a / b
     },
     "+": {
         "precedence": 2,
-        "eval_dir": EvalDir.LTOR
+        "eval_dir": EvalDir.LTOR,
+        "func": lambda a, b: a + b
     },
     "-": {
         "precedence": 2,
-        "eval_dir": EvalDir.LTOR
+        "eval_dir": EvalDir.LTOR,
+        "func": lambda a, b: a - b
     }
 }
-
-
-class ComputerV2Exception(Exception):
-    def __init__(self, message) -> None:
-        super().__init__("\033[91merror : \033[0m" + message)

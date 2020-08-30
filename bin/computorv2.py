@@ -2,6 +2,7 @@ import os
 import sys
 sys.path.insert(0, os.path.join(sys.path[0], '..'))
 
+from computorv2.exceptions import ComputerV2Exception
 from computorv2 import main as program
 
 
@@ -14,11 +15,11 @@ def main():
 		except EOFError:
 			break
 		else:
-			# try:
+			try:
 				res = program.eval_input(text)
-				print('You entered:', res)
-			# except Exception as e:
-			# 	print("\033[91mError: \033[0m", e)
+				print(res)
+			except ComputerV2Exception as e:
+				print(e)
 	print('GoodBye!')
 
 

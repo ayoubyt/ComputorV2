@@ -1,18 +1,33 @@
-def ft_sqrt(num):
+import math
+from .types import Real
 
-	if (num < 0):
-		raise ValueError("math domain error")
+# def ft_sqrt(num):
 
-	if num == 0:
-		return 0
+# 	if (num < 0):
+# 		raise ValueError("math domain error")
 
-	x = num / 10
-	y = num / x
+# 	if num == 0:
+# 		return 0
 
-	precision = 1e-14
+# 	x = num / 10
+# 	y = num / x
 
-	while (x - y > precision):
-		x = (x + y) / 2
-		y = num / x
+# 	precision = 1e-14
 
-	return x
+# 	while (x - y > precision):
+# 		x = (x + y) / 2
+# 		y = num / x
+
+# 	return x
+
+
+def ft_sqrt(x: Real):
+    return Real(math.sqrt(x.re))
+
+
+def ft_max(a: Real, b: Real):
+    return (a if a > b else b)
+
+
+def ft_min(a: Real, b: Real):
+    return (a if a < b else b)
