@@ -40,6 +40,8 @@ def eval_input(text: str):
     # remove whitespaces
     text = text.strip()
     res: str = ""
+    if (len(text) == 0):
+        return text
     if (text[0] == ":"):
         eval_command(text)
     elif "=" in text:
@@ -51,6 +53,5 @@ def eval_input(text: str):
         else:
             res = eval_asignment(text)
     else:
-        if (text):
-            res = calc(text)
+        res = calc(text)
     return res
