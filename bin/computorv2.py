@@ -16,8 +16,9 @@ def main():
 			break
 		else:
 			try:
-				res = program.eval_input(text)
-				print(res)
+				if (text):
+					res = program.eval_input(text)
+					print(res)
 			except ComputerV2Exception as e:
 				print(e)
 	print('GoodBye!')

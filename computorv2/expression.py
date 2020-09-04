@@ -33,6 +33,8 @@ def infix_to_rpnlist(text):
         else:
             classed_tokens.append(e)
 
+    # print(f"{classed_tokens=}")
+
     # here we'll substiute varible name with there values
     for i, e in enumerate(classed_tokens):
         if (type(e) is str and e in vars):
@@ -64,10 +66,11 @@ def infix_to_rpnlist(text):
                 ops_stack.append(e)
             else:
                 while(len(ops_stack) > 0):
-                    last = operators[ops_stack[-1]]
+                    last = ops_stack[-1]
                     if (isinstance(last, Function)):
                         rpn.append(ops_stack.pop())
                     else:
+                        last = operators[last]
                         if (last["precedence"] > operators[e]["precedence"]):
                             rpn.append(ops_stack.pop())
                         elif (last["precedence"] == operators[e]["precedence"] and operators[e]["eval_dir"] == EvalDir.LTOR):
@@ -89,6 +92,7 @@ def infix_to_rpnlist(text):
 
 
 def eval_rpn(rpnlist):
+    # print(f"{rpnlist=}")
     res = deque()
     for e in rpnlist:
 
@@ -107,7 +111,7 @@ def eval_rpn(rpnlist):
         elif isinstance(e, Function):
             if (len(res) < e.varnum):
                 raise ComputerV2Exception(
-                    f"not enough parameters for function '{e.name}', expexted {e.varnum} gro {len(res)}")
+                    f"not enough parameters for function '{e.name}', expected {e.varnum} got {len(res)}")
             params = [res.pop() for _ in range(e.varnum)][::-1]
             res.append(e(*params))
         elif (isinstance(e, Type)):

@@ -73,9 +73,9 @@ class Complex(Type):
             return "0"
         res = ""
         if (self.re):
-            res += f"{self.re}"
+            res += f"{self.re:g}"
         if (self.im):
-            res += f"{self.im:+}i"
+            res += f"{self.im:+g}i"
         return res
 
 
@@ -98,18 +98,21 @@ class Real(Complex):
         return self.re <= other.re
 
     def __str__(self) -> str:
-        return f"{self.re}"
+        return f"{self.re:g}"
 
 
 class Im(Complex):
-    pattern = (f"{Complex._real_patern}i")
+    pattern = (f"(?:{Complex._real_patern})?i")
 
     def __init__(self, value) -> None:
         if type(value) is str:
             expr: str = re.sub(r"\s+", "", value)
-            match = re.fullmatch(f"({Complex._real_patern})i?", expr)
+            match = re.fullmatch(f"({Complex._real_patern})?i", expr)
             if match:
-                self.re, self.im = 0, float(match.groups()[0])
+                if (match.group(1)):
+                    self.re, self.im = 0, float(match.group(1))
+                else:
+                    self.re, self.im = 0, 1
             else:
                 raise ComputerV2Exception(
                     "string must match patern 'x(+/-)yi' where x and y are real numbers")
@@ -117,4 +120,4 @@ class Im(Complex):
             super().__init__(0, value)
 
     def __str__(self) -> str:
-        return "{self.im}i"
+        return "{self.im:g}i"
