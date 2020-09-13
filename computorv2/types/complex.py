@@ -24,21 +24,21 @@ class Complex(Type):
 
     def __add__(self, other):
         if (isinstance(other, Complex)):
-            return Complex(self.re + other.re, self.im + other.im)
+            return Complex.resolve(Complex(self.re + other.re, self.im + other.im))
 
     def __sub__(self, other):
         if (isinstance(other, Complex)):
-            return Complex(self.re - other.re, self.im - other.im)
+            return Complex.resolve(Complex(self.re - other.re, self.im - other.im))
 
     def __mul__(self, other):
         if (isinstance(other, Complex)):
             re = self.re * other.re - self.im * other.im
             im = self.re * other.im + self.im * other.re
-            return Complex(re, im)
+            return Complex.resolve(Complex(re, im))
 
     def __truediv__(self, other):
         if (isinstance(other, Complex)):
-            return self * other.inv
+            return Complex.resolve(self * other.inv)
 
     def __pow__(self, other):
         if (isinstance(other, Complex)):
@@ -52,7 +52,7 @@ class Complex(Type):
                     res *= self
                 self *= self
                 b //= 2
-            return res
+            return Complex.resolve(res)
 
     @property
     def inv(self):
@@ -77,6 +77,12 @@ class Complex(Type):
         if (self.im):
             res += f"{self.im:+g}i"
         return res
+
+    @staticmethod
+    def resolve(comp):
+        if comp.im == 0:
+            return Real(comp.re)
+        return comp
 
 
 class Real(Complex):

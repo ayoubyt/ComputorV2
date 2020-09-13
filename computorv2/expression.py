@@ -53,8 +53,12 @@ def infix_to_rpnlist(text):
 
         if (e in operators):
             if (e == ","):
-                continue
-            if (e == ")"):
+                while (len(ops_stack) > 0):
+                    op = ops_stack[-1]
+                    if (op == '(' or op == ","):
+                        break
+                    rpn.append(ops_stack.pop())
+            elif (e == ")"):
                 while (len(ops_stack) > 0):
                     op = ops_stack.pop()
                     if (op == '('):
@@ -119,6 +123,7 @@ def eval_rpn(rpnlist):
         else:
             raise ComputerV2Exception(f"undefined variable {e}")
     return res[0]
+
 
 def calc(expr: str):
     return eval_rpn(infix_to_rpnlist(expr))
