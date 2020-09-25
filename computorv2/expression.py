@@ -1,3 +1,4 @@
+from math import exp
 import re
 from collections import deque
 from .types import Complex, Type, Real, Im, Matrix, Vector, Function
@@ -5,7 +6,16 @@ from .exceptions import ComputerV2Exception
 from .ft_global import operators, EvalDir, user_vars, builtin_vars
 
 
-def infix_to_rpnlist(text):
+def negatify(expr: str):
+    """
+    substitue negative numbers to more sutable format for other parsers.
+    for example '2*-1' would be '2*(0-1)' etc.
+    """
+    ops = "".join([e for e in operators])
+    return re.sub(f"([{ops}])\\-({Real.pattern}|{Im.pattern}|[a-zA-Z]+)", r"\1(0-\2)", expr)
+
+
+def infix_to_rpnlist(text: str):
     vartypes = [Im, Real, Matrix, Vector]
     types_patterns = [C.pattern for C in vartypes]
     ops_patterns = ["\\" + e for e in operators]
@@ -14,7 +24,10 @@ def infix_to_rpnlist(text):
     all_patterns = types_patterns + ops_patterns + \
         [v.lower() for v in vars] + [r"[a-zA-Z]+"]
 
-    # this line return a list of tuples of matches
+    #transfrom negative numbers to parsed form
+    text = negatify(text)
+
+    # return a list of tuples of matches
     # every match retuns in an index in the tuple
     tokens = re.findall(
         "|".join(all_patterns),

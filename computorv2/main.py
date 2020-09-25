@@ -44,14 +44,14 @@ def eval_input(text: str):
         return text
     if (text[0] == ":"):
         eval_command(text)
-    elif "=" in text:
-        text = re.sub(r"\s+", "", text)
+        return ""
+    text = re.sub(r"\s+", "", text)
+    if "=" in text:
         if text.count("=") > 1:
             raise NameError("just one '=' symbole must be in the expression")
         if (text[-1] == "?"):
-            res = eval_expression(text)
+            return eval_expression(text)
         else:
-            res = eval_asignment(text)
+            return eval_asignment(text)
     else:
-        res = calc(text)
-    return res
+        return calc(text)

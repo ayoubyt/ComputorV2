@@ -35,6 +35,14 @@ class Complex(Type):
             re = self.re * other.re - self.im * other.im
             im = self.re * other.im + self.im * other.re
             return Complex.resolve(Complex(re, im))
+        else:
+            from .matrix import Matrix
+            if (isinstance(other, Matrix)):
+                res = other.body
+                for i in range(len(res)):
+                    for j in range(len(res[i])):
+                        res[i][j] = self * res[i][j]
+                return Matrix(res)
 
     def __truediv__(self, other):
         if (isinstance(other, Complex)):
@@ -80,6 +88,10 @@ class Complex(Type):
 
     @staticmethod
     def resolve(comp):
+        """
+            if result imaginary part is real, then return a Real class objecet instead of Complex,
+            to use Real class additional functionality like comparition
+        """
         if comp.im == 0:
             return Real(comp.re)
         return comp
