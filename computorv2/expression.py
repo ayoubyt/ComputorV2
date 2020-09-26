@@ -15,17 +15,23 @@ def negatify(expr: str):
     return re.sub(f"([{ops}])\\-({Real.pattern}|{Im.pattern}|[a-zA-Z]+)", r"\1(0-\2)", expr)
 
 
+def preprocesse(text: str):
+    text = re.sub(r"\*\*", ".", text)
+    # transfrom negative numbers to parsed form
+    text = negatify(text)
+
+    return text.lower()
+
+
 def infix_to_rpnlist(text: str):
     vartypes = [Im, Real, Matrix, Vector]
     types_patterns = [C.pattern for C in vartypes]
     ops_patterns = ["\\" + e for e in operators]
     vars = {**user_vars, **builtin_vars}
 
-    all_patterns = types_patterns + ops_patterns + \
-        [v.lower() for v in vars] + [r"[a-zA-Z]+"]
+    all_patterns = types_patterns + ops_patterns + [r"[a-zA-Z]+"]
 
-    #transfrom negative numbers to parsed form
-    text = negatify(text)
+    text = preprocesse(text)
 
     # return a list of tuples of matches
     # every match retuns in an index in the tuple

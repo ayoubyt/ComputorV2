@@ -43,6 +43,11 @@ operators = {
         "eval_dir": EvalDir.RTOL,
         "func": lambda a, b: a ** b
     },
+    ".": {
+        "precedence": 2,
+        "eval_dir": EvalDir.LTOR,
+        "func": lambda a, b: a * b
+    },
     "*": {
         "precedence": 3,
         "eval_dir": EvalDir.LTOR,
@@ -53,13 +58,18 @@ operators = {
         "eval_dir": EvalDir.LTOR,
         "func": lambda a, b: a / b
     },
+    "%": {
+        "precedence": 3,
+        "eval_dir": EvalDir.LTOR,
+        "func": lambda a, b: a % b
+    },
     "+": {
-        "precedence": 2,
+        "precedence": 1,
         "eval_dir": EvalDir.LTOR,
         "func": lambda a, b: a + b
     },
     "-": {
-        "precedence": 2,
+        "precedence": 1,
         "eval_dir": EvalDir.LTOR,
         "func": lambda a, b: a - b
     }

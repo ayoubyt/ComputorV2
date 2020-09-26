@@ -118,6 +118,9 @@ class Real(Complex):
     def __str__(self) -> str:
         return f"{self.re:g}"
 
+    def __mod__(self, other):
+        return Real(self.re % other.re)
+
 
 class Im(Complex):
     pattern = (f"(?:{Complex._real_patern})?i")
