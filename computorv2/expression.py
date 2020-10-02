@@ -110,12 +110,10 @@ def infix_to_rpnlist(text: str):
     while (len(ops_stack) > 0):
         rpn.append(ops_stack.pop())
 
-    # print(f"{rpn=}")
     return rpn
 
 
 def eval_rpn(rpnlist):
-    # print(f"{rpnlist=}")
     res = deque()
     for e in rpnlist:
 
