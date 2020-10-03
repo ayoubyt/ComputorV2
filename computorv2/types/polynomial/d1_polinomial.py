@@ -1,5 +1,4 @@
 from .polynomial import Polynomial
-from .. import func
 
 class D1plynominal(Polynomial):
 

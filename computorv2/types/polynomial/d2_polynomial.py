@@ -1,6 +1,5 @@
 from .polynomial import Polynomial
-from .. import func
-
+from ...ft_math import my_sqrt
 class D2plynominal(Polynomial):
 
 	"""
@@ -52,10 +51,10 @@ class D2plynominal(Polynomial):
 		if (self.deg > 1):
 			_, b, a = self.coefs
 		if (self.delta > 0):
-			return (-b + func.bsqrt(self.delta)) / (2 * a), (-b - func.bsqrt(self.delta)) / (2 * a)
+			return (-b + my_sqrt(self.delta)) / (2 * a), (-b - my_sqrt(self.delta)) / (2 * a)
 		elif (self.delta == 0):
 			return [-b / (2 * a)]
 		else:
-			d =func.bsqrt(-self.delta)
+			d =my_sqrt(-self.delta)
 			return (-b/(2*a), -d/(2*a)), (-b/(2*a), d/(2*a))
 

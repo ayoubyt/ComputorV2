@@ -1,9 +1,16 @@
+from re import match
+from computorv2.types.complex import Real
 import re
 from collections import deque
+
 from ..function import ListFunction
+from .. import Complex, Type, Function
+from ...exceptions import ComputerV2Exception
+from ...ft_global import operators
 
 
-class Polynomial:
+
+class Polynomial(ListFunction):
     """
         Polynomial class respresents aplonominal hh
         you initiaise it by in inputing an array of the coefficients of tha polynomanal ordered from left to right
@@ -13,15 +20,6 @@ class Polynomial:
     def __init__(self, coefficients):
         self.coefs = self.__trim_coefs(coefficients)
         self.deg = len(self.coefs) - 1
-
-    def __trim_coefs(self, coefs):
-        """
-        __trim_coef is privat function designed to remove all
-        the nonsense zeros that the user inputs at the end of the array of coefficients
-        """
-        while (len(coefs) > 1 and coefs[-1] == 0):
-            coefs.pop()
-        return (coefs)
 
     def __str__(self):
         res = ""
@@ -87,27 +85,6 @@ class Polynomial:
             result = result * p1
         return result
 
-    def _set_op_param(self, op, other):
-        if (not isinstance(other, Polynomial)):
-            if (isinstance(other, int) or isinstance(other, float)):
-                return Polynomial([other])
-            else:
-                raise self.PolynominalError(
-                    f"{op} is not suported for Polyomial an {type(other)}")
-        else:
-            if ((op == "/" or op == "**") and other.deg > 0):
-                if op == "/":
-                    raise self.PolynominalError(
-                        "can't divide by a Polynomial with deg more than 0 (real number)")
-                if op == "**":
-                    raise self.PolynominalError(
-                        "can't raise a polynomina with deg more than 0 (real number) to another Polynomial")
-            return other
-
-    @classmethod
-    def parse_to_plynomainals(cls, str):
-        pass
-
     @classmethod
     def fromexpr(cls, expr):
         # this function transform an arrays of elements to a deque
@@ -132,6 +109,42 @@ class Polynomial:
         result = cls._eval_postfix(postfix)
         # print(result)
         return result
+
+    @classmethod
+    def fromfunc(cls, func: ListFunction):
+        pass
+
+
+    def __trim_coefs(self, coefs):
+        """
+        __trim_coef is privat function designed to remove all
+        the nonsense zeros that the user inputs at the end of the array of coefficients
+        """
+        while (len(coefs) > 1 and coefs[-1] == 0):
+            coefs.pop()
+        return (coefs)
+
+
+    def _set_op_param(self, op, other):
+        if (not isinstance(other, Polynomial)):
+            if (isinstance(other, int) or isinstance(other, float)):
+                return Polynomial([other])
+            else:
+                raise self.PolynominalError(
+                    f"{op} is not suported for Polyomial an {type(other)}")
+        else:
+            if ((op == "/" or op == "**") and other.deg > 0):
+                if op == "/":
+                    raise self.PolynominalError(
+                        "can't divide by a Polynomial with deg more than 0 (real number)")
+                if op == "**":
+                    raise self.PolynominalError(
+                        "can't raise a polynomina with deg more than 0 (real number) to another Polynomial")
+            return other
+
+    @classmethod
+    def parse_to_plynomainals(cls, str):
+        pass
 
     @classmethod
     def _to_postfix(cls, arr):
@@ -161,45 +174,43 @@ class Polynomial:
                             output.append(tmp)
             else:
                 output.append(c)
-            #print("output : ", output)
-            #print("opsstack: ", opstack, end="\n\n")
         while(len(opstack) > 0):
             output.append(opstack.pop())
         return(output)
 
     @classmethod
-    def (cls, postfix):
-        """
-                takes an array of string elements of a mathematical expresion
-                in postfix notation and evaluats it returning a single polynominal
-        """
-        ops = {"+": 1, "-": 1, "*": 2, "/": 2, "^": 3}
-        polystack = deque()
-        for elem in postfix:
-            if (elem in ops):
-                if (len(polystack) > 1):
-                    a = polystack.pop()
-                    b = polystack.pop()
-                    if (elem == "+"):
-                        polystack.append(b + a)
-                    elif (elem == "-"):
-                        polystack.append(b - a)
-                    elif (elem == "*"):
-                        polystack.append(b * a)
-                    elif (elem == "/"):
-                        polystack.append(b / a)
-                    elif (elem == "^"):
-                        polystack.append(b ** a)
+    def _eval_postfix(cls, postfix):
+        res = deque()
+        for e in postfix:
+
+            if (e in operators):
+                b = res.pop()
+                a = 0
+                if (len(res) == 0):
+                    if (e == "+" or e == "-"):
+                        a = 0
+                    else:
+                        raise ComputerV2Exception(
+                            f"operator {e} needs 2 oprands got 1")
                 else:
-                    raise cls.PolynominalError(
-                        "number of operators is mor than operands.")
+                    a = res.pop()
+                res.append(operators[e]["func"](a, b))
+            elif isinstance(e, Function):
+                if (len(res) < e.varnum):
+                    raise ComputerV2Exception(
+                        f"not enough parameters for function '{e.name}', expected {e.varnum} got {len(res)}")
+                params = [res.pop() for _ in range(e.varnum)][::-1]
+                res.append(e(*params).re)
+            elif (isinstance(e, Complex)):
+                res.append(cls([e.re]))
+            elif(type(e) is str):
+                if (re.match(r"[a-zA-Z]+", e)):
+                    res.append(cls([0, 1]))
+                else:
+                    res.append(cls([float(e)]))
             else:
-                if (re.search(r"[a-zA-Z]", elem)):
-                    polystack.append(
-                        (cls([0, -1]) if re.search(r"^-", elem) else cls([0, 1])))
-                else:
-                    polystack.append(cls([float(elem)]))
-        return polystack.pop()
+                raise ComputerV2Exception("can not solve, invalid input")
+        return res[0]
 
     class PolynominalError(Exception):
         msg = ""
