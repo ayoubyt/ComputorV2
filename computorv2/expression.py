@@ -16,6 +16,7 @@ def negatify(expr: str):
 
 
 def preprocesse(text: str):
+    text = re.sub(r"\s+", "", text)
     text = re.sub(r"\*\*", ".", text)
     # transfrom negative numbers to parsed form
     text = negatify(text)
@@ -138,7 +139,7 @@ def eval_rpn(rpnlist):
         elif (isinstance(e, Type)):
             res.append(e)
         else:
-            raise ComputerV2Exception(f"undefined variable {e}")
+            raise ComputerV2Exception(f"undefined variable '{e}'")
     return res[0]
 
 

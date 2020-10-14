@@ -12,6 +12,7 @@ prompt_session = PromptSession()
 
 def eval_asignment(text: str):
     varName, expr = text.split("=")
+    varName = re.sub(r"\s+", "", varName)
     if varName.lower() == "i":
         raise ComputerV2Exception(f"can't use '{varName}' as variable name")
     elif (re.fullmatch(r"[a-zA-Z]+", varName)):
@@ -23,7 +24,7 @@ def eval_asignment(text: str):
             if not re.fullmatch(r"[a-zA-Z]+", v):
                 raise ComputerV2Exception(
                     f"invalid varibale name '{v}' in function, should only contain letters")
-        res = " ".join(list(expr))
+        res = expr
         user_vars[m.group(1)] = ListFunction(expr, variables, m.group(1))
     else:
         raise ComputerV2Exception(
@@ -37,7 +38,7 @@ def eval_expression(text: str):
 
 
 def eval_input(text: str):
-    # remove whitespaces
+    # remove whitespaces from both ends
     text = text.strip()
     res: str = ""
     if (len(text) == 0):
@@ -45,7 +46,6 @@ def eval_input(text: str):
     if (text[0] == ":"):
         eval_command(text)
         return ""
-    text = re.sub(r"\s+", "", text)
     if "=" in text:
         if text.count("=") > 1:
             raise NameError("just one '=' symbole must be in the expression")

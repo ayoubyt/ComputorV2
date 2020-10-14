@@ -1,12 +1,13 @@
-from re import match
-from computorv2.types.complex import Real
 import re
+import copy
 from collections import deque
 
+
 from ..function import ListFunction
-from .. import Complex, Type, Function
+from .. import Complex, Function
 from ...exceptions import ComputerV2Exception
 from ...ft_global import operators
+from ...expression import infix_to_rpnlist
 
 
 
@@ -87,32 +88,19 @@ class Polynomial(ListFunction):
 
     @classmethod
     def fromexpr(cls, expr):
-        # this function transform an arrays of elements to a deque
-
-        # remove whitespacecs
-        # print(expr)
-        expr = re.sub(r"\s", "", expr)
-        expr = re.sub(
-            r"(^|[+*/)(])-", r"\1-1*", expr)
-        # putting '*' in its place
-        expr = re.sub(
-            r"(?:(-?\d+(?:\.\d+)?|[a-zA-Z])(?=[a-zA-Z\(]))", r"\1*", expr)
-        expr = re.sub(
-            r"(?:([\)])(?=(?:-?\d+(?:\.\d+)?|[a-zA-Z]|\()))", r"\1*", expr)
-    # print(expr)
-        elements = re.findall(
-            r"(?<![\w)])-?(?:\d+(?:\.\d+)?|[a-zA-Z])|[\*/+()^]|(?<=[\w)])-", expr)
-    # print(elements)
-        postfix = cls._to_postfix(elements)
-        print(f"{postfix=}")
-    #print(" ".join(postfix))
-        result = cls._eval_postfix(postfix)
-        # print(result)
-        return result
+        rpn_list = infix_to_rpnlist(expr)
+        return cls._eval_postfix(rpn_list)
 
     @classmethod
     def fromfunc(cls, func: ListFunction):
-        pass
+        if (len(func.vars) > 1):
+            raise ComputerV2Exception("can't construct a Polynomial with functions with more than one variables")
+        rpn_list = func.rpn_list.copy()
+        for i in range(len(rpn_list)):
+            if type(rpn_list[i]) is str and rpn_list[i].isnumeric():
+                rpn_list[i] = "x"
+        print(f"{rpn_list=}")
+        return cls._eval_postfix(rpn_list)
 
 
     def __trim_coefs(self, coefs):
@@ -141,10 +129,6 @@ class Polynomial(ListFunction):
                     raise self.PolynominalError(
                         "can't raise a polynomina with deg more than 0 (real number) to another Polynomial")
             return other
-
-    @classmethod
-    def parse_to_plynomainals(cls, str):
-        pass
 
     @classmethod
     def _to_postfix(cls, arr):
@@ -180,6 +164,7 @@ class Polynomial(ListFunction):
 
     @classmethod
     def _eval_postfix(cls, postfix):
+
         res = deque()
         for e in postfix:
 
