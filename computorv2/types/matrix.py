@@ -37,7 +37,7 @@ class Matrix(Type):
         res = ""
         for e in self.body:
             res += str([str(n) for n in e]) + "\n"
-        return res
+        return res.strip()
 
     def __mul__(self, other):
         if self.cols == other.rows:

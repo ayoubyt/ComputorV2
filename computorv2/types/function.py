@@ -1,7 +1,8 @@
-from .type import Type
 from inspect import signature
 from typing import Callable, Any, List
+import re
 
+from .type import Type
 
 class Function(Type):
     def __init__(self, fn: Callable[..., Any], name: str = "anonymouse") -> None:
@@ -16,6 +17,7 @@ class Function(Type):
 
     def __str__(self) -> str:
         return f"{self.name}({','.join(self.vars)})={self.expr}"
+
 
 class ListFunction(Function):
     def __init__(self, expr: str, vars: List[str],  name: str = "anonymouse") -> None:
@@ -38,5 +40,18 @@ class ListFunction(Function):
         from ..expression import eval_rpn
         return eval_rpn(res)
 
+    def subvars(self):
+        # a function to replace variables with there values
+        def f(m: re.Match):
+            from ..ft_global import user_vars
+            word = m.group().lower()
+            if word in user_vars:
+                return(str(user_vars[word]))
+            else:
+                return(m.group())
+        result = re.sub(r"[a-zA-Z]+", f, self.expr)
+        return result.strip()
+
     def __str__(self) -> str:
-        return f"{self.name}({','.join(self.vars)})={self.expr}"
+        result = self.subvars()
+        return f"{self.name}({','.join(self.vars)}) = {result}"

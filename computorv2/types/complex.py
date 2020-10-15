@@ -141,4 +141,4 @@ class Im(Complex):
             super().__init__(0, value)
 
     def __str__(self) -> str:
-        return "{self.im:g}i"
+        return f"{self.im:g}i"

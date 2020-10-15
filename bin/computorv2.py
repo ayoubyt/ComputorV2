@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 sys.path.insert(0, os.path.join(sys.path[0], '..'))
@@ -15,7 +17,7 @@ def main():
 
 	#parsing command line arguments
 	argparser = argparse.ArgumentParser()
-	argparser.add_argument("-f", "--file", help="file path", metavar="PATH")
+	argparser.add_argument("-f", "--file", help="read from file with path PATH", metavar="PATH")
 	args = argparser.parse_args()
 
 	if (args.file):
