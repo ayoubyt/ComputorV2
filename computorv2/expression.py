@@ -135,9 +135,6 @@ def infix_to_rpnlist(text: str):
 
 
 def eval_rpn(rpnlist):
-    if (len(rpnlist) == 1):
-        if isinstance(e, Function):
-            return rpnlist[0]
     res = deque()
     for e in rpnlist:
         if (e in operators):
@@ -156,11 +153,14 @@ def eval_rpn(rpnlist):
             except ZeroDivisionError:
                 raise ComputerV2Exception("division by zero")
         elif isinstance(e, Function):
-            if (len(res) < e.varnum):
-                raise ComputerV2Exception(
-                    f"not enough parameters for function '{e.name}', expected {e.varnum} got {len(res)}")
-            params = [res.pop() for _ in range(e.varnum)][::-1]
-            res.append(e(*params))
+            if (len(rpnlist) != 1):
+                if (len(res) < e.varnum):
+                    raise ComputerV2Exception(
+                        f"not enough parameters for function '{e.name}', expected {e.varnum} got {len(res)}")
+                params = [res.pop() for _ in range(e.varnum)][::-1]
+                res.append(e(*params))
+            else:
+                return e
         elif (isinstance(e, Type)):
             res.append(e)
         else:

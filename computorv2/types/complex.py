@@ -83,7 +83,10 @@ class Complex(Type):
         if (self.re):
             res += f"{self.re:g}"
         if (self.im):
-            res += f"{self.im:+g}i"
+            if self.re:
+                res += f"{self.im:+g}i"
+            else:
+                res += f"{self.im:g}i"
         return res
 
     @staticmethod
