@@ -20,6 +20,7 @@ class Function(Type):
 
 
 class ListFunction(Function):
+    pattern = r"[a-zA-Z]+\(.+\)"
     def __init__(self, expr: str, vars: List[str],  name: str = "anonymouse") -> None:
         self.name = name
         self.expr = expr

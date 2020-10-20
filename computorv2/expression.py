@@ -1,7 +1,8 @@
 from math import exp
 import re
 from collections import deque
-from .types import Complex, Type, Real, Im, Matrix, Function
+
+from .types import Complex, Type, Real, Im, Matrix, Function, ListFunction
 from .exceptions import ComputerV2Exception
 from .ft_global import operators, EvalDir, user_vars, builtin_vars
 
@@ -11,8 +12,8 @@ def negatify(expr: str):
     substitue negative numbers to more sutable format for other parsers.
     for example '2*-1' would be '2*(0-1)' etc.
     """
-    ops = "".join([e for e in operators])
-    return re.sub(f"([{ops}])\\-({Real.pattern}|{Im.pattern}|[a-zA-Z]+)", r"\1(0-\2)", expr)
+    ops = "".join(["\\" + e for e in operators if operators[e]["precedence"] > 0])
+    return re.sub(f"([{ops}])-({Real.pattern}|{Im.pattern}|{ListFunction.pattern}|[a-zA-Z]+)", r"\1(0-\2)", expr)
 
 
 def check_brackets(text: str):
