@@ -46,7 +46,7 @@ class ListFunction(Function):
         def f(m: re.Match):
             from ..ft_global import user_vars
             word = m.group().lower()
-            if word in user_vars:
+            if word in user_vars and not isinstance(user_vars[word], Function):
                 return(str(user_vars[word]))
             else:
                 return(m.group())

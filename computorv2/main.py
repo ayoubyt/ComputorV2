@@ -6,8 +6,11 @@ from .exceptions import ComputerV2Exception
 from .ft_global import user_vars
 from .types.function import ListFunction
 from .commands import eval_command
+from prompt_toolkit.history import FileHistory
+from .types import Polynomial, D1plynominal, D2plynominal
 
-prompt_session = PromptSession()
+
+prompt_session = PromptSession(history=FileHistory('.ComputorV2History'))
 
 
 def eval_asignment(text: str):
@@ -32,6 +35,26 @@ def eval_asignment(text: str):
             f"invalid varibale name '{varName}', should only contain letters")
     return res
 
+def eval_equation(text : str):
+    left, right = text[:-1].split("=")
+
+    eq_poly = Polynomial.fromexpr(left) - Polynomial.fromexpr(right)
+
+    if (eq_poly.deg == 2):
+        D2plynominal(eq_poly.coefs).solve()
+    elif (eq_poly.deg == 1):
+        D1plynominal(eq_poly.coefs).solve()
+    elif (eq_poly.deg == 0):
+        if (eq_poly.coefs[0] == 0):
+            print("all numbers are solutions to this eqation")
+        else:
+            print("absurde expression")
+    else:
+        print(eq_poly, "= 0")
+        print(f"eqations of degree {eq_poly.deg} are not suported")
+    return ""
+
+
 
 def eval_expression(text: str):
     expr = text.split("=")[0]
@@ -40,6 +63,7 @@ def eval_expression(text: str):
 
 def eval_input(text: str):
     # remove whitespaces from both ends
+    text = re.sub(r"\s+", "", text)
     text = text.strip()
     if (len(text) == 0):
         return text
@@ -50,7 +74,9 @@ def eval_input(text: str):
         if text.count("=") > 1:
             raise ComputerV2Exception("just one '=' symbole must be in the expression")
         if (text[-1] == "?"):
-            return eval_expression(text)
+            if text[-2] == "=":
+                return eval_expression(text)
+            return eval_equation(text)
         else:
             return eval_asignment(text)
     else:

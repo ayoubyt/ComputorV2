@@ -7,11 +7,9 @@ from ..function import ListFunction
 from .. import Complex, Function
 from ...exceptions import ComputerV2Exception
 from ...ft_global import operators
-from ...expression import infix_to_rpnlist
 
 
-
-class Polynomial(ListFunction):
+class Polynomial:
     """
         Polynomial class respresents aplonominal hh
         you initiaise it by in inputing an array of the coefficients of tha polynomanal ordered from left to right
@@ -88,20 +86,38 @@ class Polynomial(ListFunction):
 
     @classmethod
     def fromexpr(cls, expr):
+        from ...expression import infix_to_rpnlist
         rpn_list = infix_to_rpnlist(expr)
+        # check if there is more than one variables
+        if len(set([e for e in rpn_list if isinstance(e, str)])) > 1:
+            raise ComputerV2Exception(
+                "functions  with more than one variables are not supported")
+        i = 0
+        while i < (len(rpn_list)):
+            if isinstance(rpn_list[i], Function):
+                if not isinstance(rpn_list[i], ListFunction):
+                    raise ComputerV2Exception(
+                        "built in functions are not supported in equations")
+                if i - 1 >= 0:
+                    rpn_list[i] = cls.fromfunc(rpn_list[i])
+                print("haw  = ", rpn_list[i])
+                del rpn_list[i - 1]
+            else:
+                i += 1
+        print(f"haw {rpn_list=}")
         return cls._eval_postfix(rpn_list)
 
     @classmethod
     def fromfunc(cls, func: ListFunction):
         if (len(func.vars) > 1):
-            raise ComputerV2Exception("can't construct a Polynomial with functions with more than one variables")
+            raise ComputerV2Exception(
+                "can't construct a Polynomial with functions with more than one variables")
+
         rpn_list = func.rpn_list.copy()
         for i in range(len(rpn_list)):
             if type(rpn_list[i]) is str and rpn_list[i].isnumeric():
                 rpn_list[i] = "x"
-        print(f"{rpn_list=}")
         return cls._eval_postfix(rpn_list)
-
 
     def __trim_coefs(self, coefs):
         """
@@ -111,7 +127,6 @@ class Polynomial(ListFunction):
         while (len(coefs) > 1 and coefs[-1] == 0):
             coefs.pop()
         return (coefs)
-
 
     def _set_op_param(self, op, other):
         if (not isinstance(other, Polynomial)):
@@ -164,7 +179,6 @@ class Polynomial(ListFunction):
 
     @classmethod
     def _eval_postfix(cls, postfix):
-
         res = deque()
         for e in postfix:
 
@@ -181,6 +195,7 @@ class Polynomial(ListFunction):
                     a = res.pop()
                 res.append(operators[e]["func"](a, b))
             elif isinstance(e, Function):
+                print("tgz", e)
                 if (len(res) < e.varnum):
                     raise ComputerV2Exception(
                         f"not enough parameters for function '{e.name}', expected {e.varnum} got {len(res)}")
@@ -193,6 +208,8 @@ class Polynomial(ListFunction):
                     res.append(cls([0, 1]))
                 else:
                     res.append(cls([float(e)]))
+            elif isinstance(e, cls):
+                res.append(e)
             else:
                 raise ComputerV2Exception("can not solve, invalid input")
         return res[0]

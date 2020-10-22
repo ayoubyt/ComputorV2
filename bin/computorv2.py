@@ -9,7 +9,6 @@ selector = selectors.SelectSelector()
 loop = asyncio.SelectorEventLoop(selector)
 asyncio.set_event_loop(loop)
 import argparse
-
 from computorv2.exceptions import ComputerV2Exception
 from computorv2 import main as program
 
