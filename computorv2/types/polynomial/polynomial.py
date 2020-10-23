@@ -89,7 +89,7 @@ class Polynomial:
         from ...expression import infix_to_rpnlist
         rpn_list = infix_to_rpnlist(expr)
         # check if there is more than one variables
-        if len(set([e for e in rpn_list if isinstance(e, str)])) > 1:
+        if len(set([e for e in rpn_list if isinstance(e, str) and re.fullmatch(r"[a-zA-Z]+", e)])) > 1:
             raise ComputerV2Exception(
                 "functions  with more than one variables are not supported")
         i = 0
