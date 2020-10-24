@@ -100,11 +100,11 @@ class Polynomial:
                         "built in functions are not supported in equations")
                 if i - 1 >= 0:
                     rpn_list[i] = cls.fromfunc(rpn_list[i])
-                print("haw  = ", rpn_list[i])
+
                 del rpn_list[i - 1]
             else:
                 i += 1
-        print(f"haw {rpn_list=}")
+
         return cls._eval_postfix(rpn_list)
 
     @classmethod
@@ -195,7 +195,7 @@ class Polynomial:
                     a = res.pop()
                 res.append(operators[e]["func"](a, b))
             elif isinstance(e, Function):
-                print("tgz", e)
+
                 if (len(res) < e.varnum):
                     raise ComputerV2Exception(
                         f"not enough parameters for function '{e.name}', expected {e.varnum} got {len(res)}")

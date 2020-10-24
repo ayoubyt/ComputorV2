@@ -39,8 +39,8 @@ def main():
 					if (text):
 						res = program.eval_input(text)
 						print(res)
-				except ComputerV2Exception as e:
-					print(e)
+				except Exception as e:
+					print("\033[91merror :\033[0m", e)
 		print('GoodBye!')
 
 

@@ -25,10 +25,13 @@ class Complex(Type):
     def __add__(self, other):
         if (isinstance(other, Complex)):
             return Complex.resolve(Complex(self.re + other.re, self.im + other.im))
+        raise ComputerV2Exception("addition only supported with Complext type")
 
     def __sub__(self, other):
         if (isinstance(other, Complex)):
             return Complex.resolve(Complex(self.re - other.re, self.im - other.im))
+        raise ComputerV2Exception("substraction only supported with Complext type")
+
 
     def __mul__(self, other):
         if (isinstance(other, Complex)):
@@ -47,6 +50,8 @@ class Complex(Type):
     def __truediv__(self, other):
         if (isinstance(other, Complex)):
             return Complex.resolve(self * other.inv)
+        raise ComputerV2Exception("division only supported with Complext type")
+
 
     def __pow__(self, other):
         if (isinstance(other, Complex)):
@@ -61,6 +66,8 @@ class Complex(Type):
                 self *= self
                 b //= 2
             return Complex.resolve(res)
+        raise ComputerV2Exception("power only supported with Complext type")
+
 
     @property
     def inv(self):
