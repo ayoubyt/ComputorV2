@@ -63,7 +63,6 @@ def eval_expression(text: str):
 
 def eval_input(text: str):
     # remove whitespaces from both ends
-    text = re.sub(r"\s+", "", text)
     text = text.strip()
     if (len(text) == 0):
         return text
@@ -73,6 +72,7 @@ def eval_input(text: str):
     if "=" in text:
         if text.count("=") > 1:
             raise ComputerV2Exception("just one '=' symbole must be in the expression")
+        text = re.sub(r"\s+", "", text)
         if (text[-1] == "?"):
             if text[-2] == "=":
                 return eval_expression(text)
