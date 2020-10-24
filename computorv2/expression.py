@@ -12,40 +12,42 @@ def negatify(expr: str):
     substitue negative numbers to more sutable format for other parsers.
     for example '2*-1' would be '2*(0-1)' etc.
     """
-    ops = "".join(["\\" + e for e in operators if operators[e]["precedence"] > 0])
-    return re.sub(f"([{ops}])-({Real.pattern}|{Im.pattern}|{ListFunction.pattern}|[a-zA-Z]+)", r"\1(0-\2)", expr)
+    ops = "".join(
+        ["\\" + e for e in operators if operators[e]["precedence"] > 0])
+    return re.sub(f"([{ops}])-({Im.pattern}|{Real.pattern}|{ListFunction.pattern}|[a-zA-Z]+)", r"\1(0-\2)", expr)
 
 
 def check_brackets(text: str):
-	left, right = "([", ")]"
-	stack = deque()
-	for l in text:
-		if l in left:
-			stack.append(l)
-		if l in right:
-			try:
-				tmp = stack.pop()
-				if right.index(l) != left.index(tmp):
-					raise ComputerV2Exception(f"mixed brackets '{tmp}' and '{l}'")
-			except IndexError:
-				raise ComputerV2Exception(f"unmached bracket {l}")
-	if len(stack) > 0:
-		raise ComputerV2Exception(f"unmached bracket {stack[-1]}")
+    left, right = "([", ")]"
+    stack = deque()
+    for l in text:
+        if l in left:
+            stack.append(l)
+        if l in right:
+            try:
+                tmp = stack.pop()
+                if right.index(l) != left.index(tmp):
+                    raise ComputerV2Exception(
+                        f"mixed brackets '{tmp}' and '{l}'")
+            except IndexError:
+                raise ComputerV2Exception(f"unmached bracket {l}")
+    if len(stack) > 0:
+        raise ComputerV2Exception(f"unmached bracket {stack[-1]}")
 
 
 def preprocesse(text: str):
-	text = re.sub(r"\s+", "", text)
+    text = re.sub(r"\s+", "", text)
 
-	# check for unmached brackets
-	check_brackets(text)
+    # check for unmached brackets
+    check_brackets(text)
 
-	text = re.sub(r"\*\*", ".", text)
-	# transfrom negative numbers to parsed form ('2 * -1' -> '2 * (0 - 1)')
-	text = negatify(text)
+    text = re.sub(r"\*\*", ".", text)
+    # transfrom negative numbers to parsed form ('2 * -1' -> '2 * (0 - 1)')
+    text = negatify(text)
 
-	# check if some weird caracters exists
+    # check if some weird caracters exists
 
-	return text.lower()
+    return text.lower()
 
 
 def infix_to_rpnlist(text: str):
@@ -56,7 +58,7 @@ def infix_to_rpnlist(text: str):
 
     all_patterns = types_patterns + ops_patterns + [r"[a-zA-Z]+"]
 
-	# preprossessing text
+    # preprossessing text
     text = preprocesse(text)
 
     # return a list of tuples of matches
@@ -142,11 +144,11 @@ def eval_rpn(rpnlist):
             b = res.pop()
             a = 0
             if (len(res) == 0):
-                    if (e == "+" or e == "-"):
-                        a = Complex(0, 0)
-                    else:
-                        raise ComputerV2Exception(
-                            f"operator {e} needs 2 oprands got 1")
+                if (e == "+" or e == "-"):
+                    a = Complex(0, 0)
+                else:
+                    raise ComputerV2Exception(
+                        f"operator {e} needs 2 oprands got 1")
             else:
                 a = res.pop()
             try:
