@@ -21,6 +21,9 @@ def eval_asignment(text: str):
     elif (re.fullmatch(r"[a-zA-Z]+", varName)):
         res = calc(expr)
         user_vars[varName] = res
+    elif (not varName):
+         raise ComputerV2Exception(
+                    f"empty variable name")
     elif (m := re.fullmatch(r"([a-zA-Z]+)\((.+)\)", varName)):
         variables = m.group(2).split(",")
         for v in variables:

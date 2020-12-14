@@ -22,7 +22,7 @@ def my_sqrt(num):
 
 
 def ft_sqrt(x: Real):
-    return Real(my_sqrt(x.re))
+    return Real(math.sqrt(x.re))
 
 
 def ft_max(a: Real, b: Real):
