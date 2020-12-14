@@ -9,7 +9,7 @@ def my_sqrt(num):
 	if num == 0:
 		return 0
 
-	x = num / 10
+	x = num
 	y = num / x
 
 	precision = 1e-14
@@ -22,7 +22,7 @@ def my_sqrt(num):
 
 
 def ft_sqrt(x: Real):
-    return Real(math.sqrt(x.re))
+    return Real(my_sqrt(x.re))
 
 
 def ft_max(a: Real, b: Real):
