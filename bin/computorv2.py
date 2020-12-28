@@ -9,8 +9,15 @@ selector = selectors.SelectSelector()
 loop = asyncio.SelectorEventLoop(selector)
 asyncio.set_event_loop(loop)
 import argparse
+
+from prompt_toolkit import PromptSession
+from prompt_toolkit.history import FileHistory
+
 from computorv2.exceptions import ComputerV2Exception
 from computorv2 import main as program
+
+
+prompt_session = PromptSession(history=FileHistory('.ComputorV2History'))
 
 def main():
 
@@ -29,7 +36,7 @@ def main():
 	else :
 		while True:
 			try:
-				text = program.prompt_session.prompt('> ')
+				text = prompt_session.prompt('> ')
 			except KeyboardInterrupt:
 				continue
 			except EOFError:
@@ -42,7 +49,6 @@ def main():
 				except Exception as e:
 					print("\033[91merror :\033[0m", e)
 		print('GoodBye!')
-
 
 if __name__ == '__main__':
 	main()

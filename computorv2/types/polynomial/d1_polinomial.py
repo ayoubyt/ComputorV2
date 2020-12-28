@@ -15,10 +15,12 @@ class D1plynominal(Polynomial):
 			raise self.PolynominalError("2 and only 2 coeficients are required")
 
 	def solve(self):
+		res = ""
 		b, a = self.coefs
-		print(self, "= 0")
-		print("a first degree equation with one solution :")
-		print("x = %f" % (-b / a))
+		res += (str(self) + "= 0\n")
+		res += ("a first degree equation with one solution :") + "\n"
+		res += ("x = %f" % (-b / a))
+		return res
 
 
 

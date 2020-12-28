@@ -1,16 +1,11 @@
 import re
 from re import fullmatch
-from prompt_toolkit import PromptSession
 from .expression import calc
 from .exceptions import ComputerV2Exception
 from .ft_global import user_vars
 from .types.function import ListFunction
 from .commands import eval_command
-from prompt_toolkit.history import FileHistory
 from .types import Polynomial, D1plynominal, D2plynominal
-
-
-prompt_session = PromptSession(history=FileHistory('.ComputorV2History'))
 
 
 def eval_asignment(text: str):
@@ -44,18 +39,16 @@ def eval_equation(text : str):
     eq_poly = Polynomial.fromexpr(left) - Polynomial.fromexpr(right)
 
     if (eq_poly.deg == 2):
-        D2plynominal(eq_poly.coefs).solve()
+        return D2plynominal(eq_poly.coefs).solve()
     elif (eq_poly.deg == 1):
-        D1plynominal(eq_poly.coefs).solve()
+        return D1plynominal(eq_poly.coefs).solve()
     elif (eq_poly.deg == 0):
         if (eq_poly.coefs[0] == 0):
-            print("all numbers are solutions to this eqation")
+            return ("all numbers are solutions to this eqation")
         else:
-            print("absurde expression")
+            return ("absurde expression")
     else:
-        print(eq_poly, "= 0")
-        print(f"eqations of degree {eq_poly.deg} are not suported")
-    return ""
+        return str(eq_poly) +  "= 0\n" +f"eqations of degree {eq_poly.deg} are not suported"
 
 
 
@@ -64,7 +57,7 @@ def eval_expression(text: str):
     return calc(expr)
 
 
-def eval_input(text: str):
+def eval_input(text: str) -> str:
     # remove whitespaces from both ends
     text = text.strip()
     if (len(text) == 0):
@@ -84,3 +77,4 @@ def eval_input(text: str):
             return eval_asignment(text)
     else:
         return calc(text)
+

@@ -18,19 +18,21 @@ class D2plynominal(Polynomial):
 		self.roots = self._get_roots()
 
 	def solve(self):
-		print(self, "= 0")
-		print("delta : %f" % self.delta)
+		res = ""
+		res += (str(self) + " = 0\n")
+		res += ("delta : %f" % self.delta) + "\n"
 		if (self.delta > 0):
-			print("delta is positive, so there are two real solutions :")
-			print("x1 = %f" % self.roots[0])
-			print("x2 = %f" % self.roots[1])
+			res += ("delta is positive, so there are two real solutions :\n")
+			res += ("x1 = %f" % self.roots[0]) + " \n"
+			res += ("x2 = %f" % self.roots[1]) + " \n"
 		elif (self.delta == 0):
-			print("delta iequal to 0, so there are one real solution :")
-			print("x = %f" % self.roots[0])
+			res += ("delta iequal to 0, so there are one real solution :\n")
+			res += ("x = %f" % self.roots[0]) + "\n"
 		else:
-			print("delta is positive, so there are two complex solutions :")
-			print("z1 = %f + %fi" % (self.roots[0][0], self.roots[0][1]))
-			print("z2 = %f + %fi" % (self.roots[1][0], self.roots[1][1]))
+			res += ("delta is positive, so there are two complex solutions :\n")
+			res += ("z1 = %f + %fi" % (self.roots[0][0], self.roots[0][1])) + "\n"
+			res += ("z2 = %f + %fi" % (self.roots[1][0], self.roots[1][1]))
+		return res
 
 
 	@classmethod
