@@ -1,6 +1,7 @@
 from inspect import signature
 from typing import Callable, Any, List
 import re
+import copy
 
 from .type import Type
 
@@ -34,7 +35,7 @@ class ListFunction(Function):
         self.rpn_list = rpn_list
 
     def __call__(self, *args, **kwds):
-        res = self.rpn_list.copy()
+        res = copy.deepcopy(self.rpn_list)
         for i in range(len(self.rpn_list)):
             if isinstance(res[i], str) and res[i].isdigit():
                 res[i] = args[int(res[i])]

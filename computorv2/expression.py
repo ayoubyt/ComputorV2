@@ -1,11 +1,9 @@
-from math import exp
 import re
 from collections import deque
 
 from .types import Complex, Type, Real, Im, Matrix, Function, ListFunction
 from .exceptions import ComputerV2Exception
 from .ft_global import operators, EvalDir, user_vars, builtin_vars
-
 
 def negatify(expr: str):
     """
@@ -142,7 +140,6 @@ def eval_rpn(rpnlist):
     for e in rpnlist:
         if (e in operators):
             b = res.pop()
-            a = 0
             if (len(res) == 0):
                 if (e == "+" or e == "-"):
                     a = Complex(0, 0)
