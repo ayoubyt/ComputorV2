@@ -48,7 +48,6 @@ def main():
 						print(res)
 				except Exception as e:
 					print("\033[91merror :\033[0m", e)
-		print('GoodBye!')
 
 if __name__ == '__main__':
 	main()

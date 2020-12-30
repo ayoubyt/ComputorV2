@@ -76,10 +76,15 @@ class Polynomial:
 
     def __pow__(self, other):
         p1 = self
-        n = int(self._set_op_param("**", other).coefs[0])
+        n = self._set_op_param("**", other).coefs[0]
+        if (n) < 0:
+            raise self.PolynominalError("can't raise a polynomial to negative powers")
+        if not n.is_integer():
+            raise self.PolynominalError("can't raise to anone intiger power")
         result = p1
         if (n == 0):
             return Polynomial([1])
+        n = int(n)
         for _ in range(n - 1):
             result = result * p1
         return result
@@ -184,10 +189,9 @@ class Polynomial:
 
             if (e in operators):
                 b = res.pop()
-                a = 0
                 if (len(res) == 0):
                     if (e == "+" or e == "-"):
-                        a = 0
+                        a = Polynomial([0])
                     else:
                         raise ComputerV2Exception(
                             f"operator {e} needs 2 oprands got 1")
@@ -212,6 +216,8 @@ class Polynomial:
                 res.append(e)
             else:
                 raise ComputerV2Exception("can not solve, invalid input")
+        if (len(res) == 0):
+            raise ComputerV2Exception("empty expression")
         return res[0]
 
     class PolynominalError(Exception):

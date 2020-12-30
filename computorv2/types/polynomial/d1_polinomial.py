@@ -17,7 +17,7 @@ class D1plynominal(Polynomial):
 	def solve(self):
 		res = ""
 		b, a = self.coefs
-		res += (str(self) + "= 0\n")
+		res += (str(self) + " = 0\n")
 		res += ("a first degree equation with one solution :") + "\n"
 		res += ("x = %f" % (-b / a))
 		return res

@@ -24,12 +24,12 @@ class D2plynominal(Polynomial):
 		if (self.delta > 0):
 			res += ("delta is positive, so there are two real solutions :\n")
 			res += ("x1 = %f" % self.roots[0]) + " \n"
-			res += ("x2 = %f" % self.roots[1]) + " \n"
+			res += ("x2 = %f" % self.roots[1])
 		elif (self.delta == 0):
 			res += ("delta iequal to 0, so there are one real solution :\n")
 			res += ("x = %f" % self.roots[0]) + "\n"
 		else:
-			res += ("delta is positive, so there are two complex solutions :\n")
+			res += ("delta is negative, so there are two complex solutions :\n")
 			res += ("z1 = %f + %fi" % (self.roots[0][0], self.roots[0][1])) + "\n"
 			res += ("z2 = %f + %fi" % (self.roots[1][0], self.roots[1][1]))
 		return res
