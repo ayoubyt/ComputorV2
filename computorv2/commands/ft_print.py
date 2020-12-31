@@ -22,4 +22,4 @@ def cmd_print(params: str):
             print(m.group(1), end=" ")
         else:
             print(calc(t), end=" ")
-    # print()
+    print()
