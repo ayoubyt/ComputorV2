@@ -2,6 +2,7 @@ from math import sqrt
 import re
 from ..exceptions import ComputerV2Exception
 from .type import Type
+import copy
 
 
 class Complex(Type):
@@ -30,8 +31,8 @@ class Complex(Type):
     def __sub__(self, other):
         if (isinstance(other, Complex)):
             return Complex.resolve(Complex(self.re - other.re, self.im - other.im))
-        raise ComputerV2Exception("substraction only supported with Complext type")
-
+        raise ComputerV2Exception(
+            "substraction only supported with Complext type")
 
     def __mul__(self, other):
         if (isinstance(other, Complex)):
@@ -41,7 +42,7 @@ class Complex(Type):
         else:
             from .matrix import Matrix
             if (isinstance(other, Matrix)):
-                res = other.body
+                res = copy.deepcopy(other.body)
                 for i in range(len(res)):
                     for j in range(len(res[i])):
                         res[i][j] = self * res[i][j]
@@ -51,7 +52,6 @@ class Complex(Type):
         if (isinstance(other, Complex)):
             return Complex.resolve(self * other.inv)
         raise ComputerV2Exception("division only supported with Complext type")
-
 
     def __pow__(self, other):
         if (isinstance(other, Complex)):
@@ -67,7 +67,6 @@ class Complex(Type):
                 b //= 2
             return Complex.resolve(res)
         raise ComputerV2Exception("power only supported with Complext type")
-
 
     @property
     def inv(self):

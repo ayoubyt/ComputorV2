@@ -136,22 +136,27 @@ def infix_to_rpnlist(text: str):
 
 
 def eval_rpn(rpnlist):
+    if (len(rpnlist) == 0):
+        raise ComputerV2Exception("empty expression")
     res = deque()
     for e in rpnlist:
         if (e in operators):
-            b = res.pop()
-            if (len(res) == 0):
-                if (e == "+" or e == "-"):
-                    a = Complex(0, 0)
+            try :
+                b = res.pop()
+                if (len(res) == 0):
+                    if (e == "+" or e == "-"):
+                        a = Complex(0, 0)
+                    else:
+                        raise ComputerV2Exception(
+                            f"operator {e} needs 2 oprands got 1")
                 else:
-                    raise ComputerV2Exception(
-                        f"operator {e} needs 2 oprands got 1")
-            else:
-                a = res.pop()
-            try:
-                res.append(operators[e]["func"](a, b))
-            except ZeroDivisionError:
-                raise ComputerV2Exception("division by zero")
+                    a = res.pop()
+                try:
+                    res.append(operators[e]["func"](a, b))
+                except ZeroDivisionError:
+                    raise ComputerV2Exception("division by zero")
+            except IndexError:
+                raise ComputerV2Exception(f"not enough oprands for operator '{e}'")
         elif isinstance(e, Function):
             if (len(rpnlist) != 1):
                 if (len(res) < e.varnum):
