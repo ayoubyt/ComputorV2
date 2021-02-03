@@ -25,3 +25,9 @@ git clone https://github.com/ayoubyt/ComputorV2.git
 cd ComputorV2
 pip install -r requirements.txt
 ```
+
+---
+## Usage
+
+  examples : 
+  ![alt text]( /docs/example1 "ComputerV2 usage Example" )
