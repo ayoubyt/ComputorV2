@@ -1,5 +1,5 @@
 # ComputorV2
-42 school project which requires building a basic interactive mathematical interpreter
+42 school project which requires building a basic interactive mathematical interpreter, tou can lean more in the [subject](https://cdn.intra.42.fr/pdf/pdf/13228/en.subject.pdf) pdf.
 
 ### requirments
 >python3.8 or higher
@@ -30,4 +30,4 @@ pip install -r requirements.txt
 ## Usage
 
   examples : 
-  ![alt text]( docs/example1.png "ComputerV2 usage Example" )
+  ![]( docs/example1.png "ComputerV2 usage Example")
