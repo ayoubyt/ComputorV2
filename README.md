@@ -30,4 +30,4 @@ pip install -r requirements.txt
 ## Usage
 
   examples : 
-  ![alt text]( /docs/example1 "ComputerV2 usage Example" )
+  ![alt text]( ./docs/example1 "ComputerV2 usage Example" )
